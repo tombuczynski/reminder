@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:background="@color/col_dark_gray"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        >
+
+        <View
+            android:id="@+id/row_tab"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="@color/col_green"/>
+
+        <TextView
+            android:id="@+id/row_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Treść przypomnienia"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/col_white"
+            android:singleLine="true"/>
+
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#805080"
+        />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#505050"
+        />
+
+</LinearLayout>
