@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -52,11 +51,18 @@ public class RemindersActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_new:
+                return true;
+
+            case R.id.action_exit:
+                finish();
+                return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
 }
+
+//tools:showIn="@layout/activity_reminders"
