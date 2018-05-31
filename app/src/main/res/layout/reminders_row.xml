@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="50dp"
               android:background="@color/col_dark_gray"
@@ -15,7 +16,7 @@
             android:id="@+id/row_tab"
             android:layout_width="10dp"
             android:layout_height="match_parent"
-            android:background="@color/col_green"/>
+            android:background="@android:color/white"/>
 
         <TextView
             android:id="@+id/row_text"
@@ -24,10 +25,10 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:padding="5dp"
-            android:text="Treść przypomnienia"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/col_white"
-            android:singleLine="true"/>
+            tools:text="Treść przypomnienia"/>
 
     </LinearLayout>
     <View

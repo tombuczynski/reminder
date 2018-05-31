@@ -1,6 +1,8 @@
 package com.apress.gerber.reminders;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class RemindersActivity extends AppCompatActivity {
+
+    private RemindersDB mRemindersDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +34,15 @@ public class RemindersActivity extends AppCompatActivity {
             }
         });
 
-        ListAdapter a = new ArrayAdapter<String>(this, R.layout.reminders_row, R.id.row_text,
-                new String[] {"Dentysta", "Serwis", "Lot do Bolonii"});
+        mRemindersDB = new RemindersDB(this);
+        mRemindersDB.open();
+
+        Cursor cur = mRemindersDB.fetchAll();
+
+        RemindersCursorAdapter a = new RemindersCursorAdapter(this,
+                R.layout.reminders_row, cur,
+                new String[]{RemindersDB.COL_CONTENT, RemindersDB.COL_IMPORTANT},
+                new int[]{R.id.row_text, R.id.row_tab});
 
         ListView lv = (ListView)findViewById(R.id.reminders_list_view);
         lv.setAdapter(a);
@@ -56,6 +67,7 @@ public class RemindersActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_exit:
+                mRemindersDB.close();
                 finish();
                 return true;
         }
