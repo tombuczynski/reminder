@@ -23,14 +23,13 @@ public class RemindersCursorAdapter extends SimpleCursorAdapter {
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 
-                if (view instanceof TextView) {
-                  return false;
-                }
-                else {
+                if (!(view instanceof TextView)) {
                     int important = cursor.getInt(columnIndex);
                     view.setBackgroundColor(important != 0 ? mColorImportant : mColorNotImportant);
                     return true;
                 }
+
+                return false;
             }
         };
 
