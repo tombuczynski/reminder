@@ -2,4 +2,9 @@
     <string name="app_name">Reminders</string>
     <string name="action_new">New reminder</string>
     <string name="action_exit">Exit</string>
+
+    <array name="listitem_choice">
+        <item>Edit</item>
+        <item>Remove</item>
+    </array>
 </resources>

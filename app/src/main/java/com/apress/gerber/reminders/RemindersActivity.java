@@ -1,8 +1,9 @@
 package com.apress.gerber.reminders;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class RemindersActivity extends AppCompatActivity {
 
@@ -36,7 +37,11 @@ public class RemindersActivity extends AppCompatActivity {
 
         mRemindersDB = new RemindersDB(this);
         mRemindersDB.open();
-
+/*
+        if (savedInstanceState == null) {
+            mRemindersDB.insertSomeReminders();
+        }
+*/
         Cursor cur = mRemindersDB.fetchAll();
 
         RemindersCursorAdapter a = new RemindersCursorAdapter(this,
@@ -45,6 +50,8 @@ public class RemindersActivity extends AppCompatActivity {
                 new int[]{R.id.row_text, R.id.row_tab});
 
         ListView lv = (ListView)findViewById(R.id.reminders_list_view);
+        ListViewListener listener = new ListViewListener();
+        lv.setOnItemClickListener(listener);
         lv.setAdapter(a);
     }
 
@@ -74,6 +81,23 @@ public class RemindersActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class ListViewListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, final int position, final long id) {
+            //Toast.makeText(RemindersActivity.this, "Pos:" + position + ", Id:" + id, Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder dialBuilder = new AlertDialog.Builder(RemindersActivity.this);
+            dialBuilder.setItems(R.array.listitem_choice, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(RemindersActivity.this, "Pos:" + position + ", Id:" + id + ", Which:" + which, Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+            dialBuilder.show();
+        }
     }
 }
 
