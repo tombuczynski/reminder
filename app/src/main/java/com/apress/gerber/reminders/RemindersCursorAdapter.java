@@ -14,10 +14,10 @@ public class RemindersCursorAdapter extends SimpleCursorAdapter {
     private int mColorImportant, mColorNotImportant;
 
     public RemindersCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
-        super(context, layout, c, from, to, 0);
+        super(context, layout, c, from, to);
 
-        mColorImportant = context.getResources().getColor(R.color.col_orange, null);
-        mColorNotImportant = context.getResources().getColor(R.color.col_green, null);
+        mColorImportant = context.getResources().getColor(R.color.col_orange);
+        mColorNotImportant = context.getResources().getColor(R.color.col_green);
 
         SimpleCursorAdapter.ViewBinder vb = new ViewBinder() {
             @Override

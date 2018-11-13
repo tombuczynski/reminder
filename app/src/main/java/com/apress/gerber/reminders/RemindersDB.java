@@ -80,6 +80,10 @@ public class RemindersDB {
         insert("Superważne przypomnienie", true);
     }
 
+    public long delete(long id) {
+        return mDb.delete(TABLE_NAME, COL_ID + "=" +id, null);
+    }
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         DatabaseHelper(Context context) {

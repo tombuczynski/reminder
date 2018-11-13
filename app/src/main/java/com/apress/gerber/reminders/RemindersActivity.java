@@ -1,23 +1,32 @@
 package com.apress.gerber.reminders;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.ActionMode;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class RemindersActivity extends AppCompatActivity {
 
+    private static final String TAG = "RemindersActivity";
+
     private RemindersDB mRemindersDB;
+    private RemindersCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +46,16 @@ public class RemindersActivity extends AppCompatActivity {
 
         mRemindersDB = new RemindersDB(this);
         mRemindersDB.open();
-/*
+
+
         if (savedInstanceState == null) {
             mRemindersDB.insertSomeReminders();
         }
-*/
+
+
         Cursor cur = mRemindersDB.fetchAll();
 
-        RemindersCursorAdapter a = new RemindersCursorAdapter(this,
+        mCursorAdapter = new RemindersCursorAdapter(this,
                 R.layout.reminders_row, cur,
                 new String[]{RemindersDB.COL_CONTENT, RemindersDB.COL_IMPORTANT},
                 new int[]{R.id.row_text, R.id.row_tab});
@@ -52,7 +63,11 @@ public class RemindersActivity extends AppCompatActivity {
         ListView lv = (ListView)findViewById(R.id.reminders_list_view);
         ListViewListener listener = new ListViewListener();
         lv.setOnItemClickListener(listener);
-        lv.setAdapter(a);
+        lv.setAdapter(mCursorAdapter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            multiChoice(lv);
+        }
+
     }
 
     @Override
@@ -98,6 +113,55 @@ public class RemindersActivity extends AppCompatActivity {
 
             dialBuilder.show();
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void multiChoice(final AbsListView lv)
+    {
+        lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        lv.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.list_action_menu, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+                if (item.getItemId() == R.id.menu_item_delete) {
+                    long[] checkedIds = lv.getCheckedItemIds();
+
+                    for (long id : checkedIds) {
+                        mRemindersDB.delete(id);
+                    }
+
+                    mCursorAdapter.changeCursor(mRemindersDB.fetchAll());
+
+                    mode.finish();
+                    return true;
+                }
+
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
+
     }
 }
 
