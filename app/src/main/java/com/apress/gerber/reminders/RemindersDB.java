@@ -15,9 +15,6 @@ public class RemindersDB {
     public static final String COL_ID = "_id";
     public static final String COL_CONTENT = "content";
     public static final String COL_IMPORTANT = "important";
-    public static final int COLIDX_ID = 0;
-    public static final int COLIDX_CONTENT = 1;
-    public static final int COLIDX_IMPORTANT = 2;
     private static final String DB_NAME = "reminders.db";
     private static final int DB_VERSION = 1;
     private static final String TABLE_NAME = "reminders";
@@ -52,19 +49,34 @@ public class RemindersDB {
         return cur;
     }
 
+    public Reminder fetchReminder(int id) {
+        Cursor cur = mDb.query(TABLE_NAME, new String[]{COL_ID, COL_CONTENT, COL_IMPORTANT},
+                 COL_ID + "=" + id, null, null, null, null);
+        if (cur != null) {
+            cur.moveToFirst();
+            Reminder r = new Reminder(id, cur.getString(cur.getColumnIndex(COL_CONTENT)),
+                                        cur.getInt(cur.getColumnIndex(COL_IMPORTANT)));
+            cur.close();
+
+            return r;
+        }
+
+        return null;
+    }
+
     public void deleteAll() {
         mDb.delete(TABLE_NAME, null, null);
     }
 
-    public long insert(Reminder reminder) {
+    public int insert(Reminder reminder) {
         ContentValues values = new ContentValues();
         values.put(COL_CONTENT, reminder.getContent());
         values.put(COL_IMPORTANT, reminder.getImportant());
 
-        return mDb.insert(TABLE_NAME, null, values);
+        return (int)mDb.insert(TABLE_NAME, null, values);
     }
 
-    public long insert(String content, boolean important){
+    public int insert(String content, boolean important){
         return insert(new Reminder(0, content, important ? 1 : 0));
     }
 
@@ -74,13 +86,25 @@ public class RemindersDB {
         }
     }
 
+    public int update(Reminder reminder) {
+        ContentValues values = new ContentValues();
+        values.put(COL_CONTENT, reminder.getContent());
+        values.put(COL_IMPORTANT, reminder.getImportant());
+
+        return mDb.update(TABLE_NAME, values,COL_ID + "=" + reminder.getId(), null);
+    }
+
+    public int update(int id, String content, boolean important) {
+        return update(new Reminder(id, content, important ? 1 : 0));
+    }
+
     public void insertSomeReminders() {
         deleteAll();
         insert("Zwykłe, nudne przypomnienie", false);
         insert("Superważne przypomnienie", true);
     }
 
-    public long delete(long id) {
+    public int delete(long id) {
         return mDb.delete(TABLE_NAME, COL_ID + "=" +id, null);
     }
 
