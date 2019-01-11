@@ -2,6 +2,7 @@ package com.apress.gerber.reminders;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Build;
@@ -22,6 +23,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.Date;
 
 public class RemindersActivity extends AppCompatActivity {
 
@@ -127,6 +130,15 @@ public class RemindersActivity extends AppCompatActivity {
                         case 1:
                             mRemindersDB.delete(id);
                             mCursorAdapter.changeCursor(mRemindersDB.fetchAll());
+                            break;
+
+                        case 2:
+                            Date now = new Date();
+                            int hourOfDay = now.getHours();
+                            int minute = now.getMinutes();
+                            TimePickerDialog dialogTime = new TimePickerDialog(RemindersActivity.this,
+                                    null, hourOfDay, minute, true);
+                            dialogTime.show();
                             break;
 
                         default:

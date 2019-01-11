@@ -8,8 +8,9 @@
     <string name="edit_dial_title_edit">Edit reminder</string>
     <string name="edit_dial_pos_button">Apply</string>
     <string name="edit_dial_neg_button">Cancel</string>
-    <array name="listitem_choice">
+    <string-array name="listitem_choice">
         <item>Edit</item>
         <item>Remove</item>
-    </array>
+        <item>Set Alarm</item>
+    </string-array>
 </resources>
