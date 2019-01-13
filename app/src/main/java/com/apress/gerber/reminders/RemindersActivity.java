@@ -1,9 +1,13 @@
 package com.apress.gerber.reminders;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -133,11 +138,20 @@ public class RemindersActivity extends AppCompatActivity {
                             break;
 
                         case 2:
+                            TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                    Reminder r = mRemindersDB.fetchReminder((int)id);
+                                    scheduleAlarm(hourOfDay, minute, r.getContent());
+                                }
+                            };
+
                             Date now = new Date();
                             int hourOfDay = now.getHours();
                             int minute = now.getMinutes();
+
                             TimePickerDialog dialogTime = new TimePickerDialog(RemindersActivity.this,
-                                    null, hourOfDay, minute, true);
+                                    listener, hourOfDay, minute, true);
                             dialogTime.show();
                             break;
 
@@ -151,6 +165,19 @@ public class RemindersActivity extends AppCompatActivity {
 
             dialBuilder.show();
         }
+    }
+
+    private void scheduleAlarm(int hourOfDay, int minute, String content) {
+        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra(AlarmReceiver.REMINDER_CONTENT, content);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+        Date now = new Date();
+        now.setHours(hourOfDay);
+        now.setMinutes(minute);
+
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, now.getTime(), alarmIntent);
     }
 
     void fireEditDialog(final Reminder reminder) {
