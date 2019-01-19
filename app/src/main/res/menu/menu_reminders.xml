@@ -8,6 +8,11 @@
         android:title="@string/action_new"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/action_about"
+        android:orderInCategory="100"
+        android:title="@string/action_about"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/action_exit"
         android:orderInCategory="100"
         android:title="@string/action_exit"

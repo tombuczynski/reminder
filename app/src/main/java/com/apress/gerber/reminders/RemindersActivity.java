@@ -109,6 +109,10 @@ public class RemindersActivity extends AppCompatActivity {
                 fireEditDialog(null);
                 return true;
 
+            case R.id.action_about:
+                fireAboutDialog();
+                return true;
+
             case R.id.action_exit:
                 mRemindersDB.close();
                 finish();
@@ -165,6 +169,16 @@ public class RemindersActivity extends AppCompatActivity {
 
             dialBuilder.show();
         }
+    }
+
+    private void fireAboutDialog() {
+        AlertDialog.Builder dialBuilder = new AlertDialog.Builder(this);
+
+        LayoutInflater li = getLayoutInflater();
+        View v = li.inflate(R.layout.about_dialog_view, null);
+        dialBuilder.setView(v);
+
+        dialBuilder.show();
     }
 
     private void scheduleAlarm(int hourOfDay, int minute, String content) {
