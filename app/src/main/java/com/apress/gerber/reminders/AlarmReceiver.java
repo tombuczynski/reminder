@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 
 import java.util.Date;
@@ -22,13 +23,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Notification notification = new NotificationCompat.Builder(context)
                 .setTicker("Reminder !")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(context.getResources().getColor(R.color.colorPrimary))
                 .setContentText(reminderContent)
                 .setWhen(new Date().getTime())
                 .setContentIntent(pi)
                 .build();
 
-        NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
         manager.notify(1, notification);
     }
 }

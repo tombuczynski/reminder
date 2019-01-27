@@ -185,7 +185,7 @@ public class RemindersActivity extends AppCompatActivity {
         AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra(AlarmReceiver.REMINDER_CONTENT, content);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Date now = new Date();
         now.setHours(hourOfDay);
